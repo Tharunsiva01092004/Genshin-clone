@@ -132,6 +132,7 @@ function performModalLogin() {
 
 // === Update Profile UI ===
 function updateProfileUI(username) {
+    // 1. Show Profile in Navbar
     const navProfile = document.getElementById('nav-profile');
     if (navProfile) {
         navProfile.style.display = 'block';
@@ -139,6 +140,15 @@ function updateProfileUI(username) {
         if (profileToggle) {
             profileToggle.innerHTML = '<i class="fa-solid fa-user-astronaut"></i> ' + username;
         }
+    }
+
+    // 2. Update Download Button to Redirect instead of Login
+    const heroBtn = document.getElementById('heroDownloadBtn');
+    if (heroBtn) {
+        heroBtn.onclick = function () {
+            window.open('https://genshin.hoyoverse.com/en/download', '_blank');
+        };
+        heroBtn.textContent = "Download Game"; // Optional: Change text to indicate action
     }
 }
 
@@ -152,6 +162,13 @@ function logout() {
     const navProfile = document.getElementById('nav-profile');
     if (navProfile) {
         navProfile.style.display = 'none';
+    }
+
+    // Reset Download Button to Open Modal
+    const heroBtn = document.getElementById('heroDownloadBtn');
+    if (heroBtn) {
+        heroBtn.onclick = openLoginModal;
+        heroBtn.textContent = "Download Now!";
     }
 
     // Redirect to home (if using SPA sections)
