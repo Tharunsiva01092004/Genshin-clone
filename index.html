@@ -1,79 +1,1468 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Genshin Impact – Step Into a Vast Magical World of Adventure</title>
-    <link rel="icon" href="Genshin_Impact.png" type="image/x-icon"></link>
-    <link rel="stylesheet" href="New project.css">
-    <script src="https://kit.fontawesome.com/fc8a1831d4.js"></script>
+    <link rel="icon" href="assets/images/Genshin_Impact.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://kit.fontawesome.com/fc8a1831d4.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Swiper CSS (from Gameplay) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <!-- Login Logic -->
+    <script src="js/login.js" defer></script>
+    <style>
+        /* Utility to hide sections */
+        .page-section {
+            display: none;
+            /* Default hidden, JS will toggle */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        #footer-webgl {
+            opacity: 1 !important;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="hero">
 
-        <video autoplay loop muted plays-inline class="back-video">
-            <source src="BG vid.mp4" type="video/mp4">
-        </video>
+    <!-- Shared Navigation -->
+    <nav>
+        <img src="assets/images/Logo.png" class="logo" onclick="showSection('home')" alt="Genshin Impact Logo">
+        <ul>
+            <li><a href="javascript:void(0)" onclick="showSection('home')" id="nav-home" class="active">HOME</a></li>
+            <li><a href="javascript:void(0)" onclick="showSection('gameplay')" id="nav-gameplay">GAMEPLAY</a></li>
+            <li><a href="javascript:void(0)" onclick="showSection('explore')" id="nav-explore">EXPLORE</a></li>
+            <!-- Login Link REMOVED -->
+            <!-- HoYoLAB stays external -->
+            <li><a href="https://www.hoyolab.com/home" target="_blank">HoYoLAB</a></li>
 
-        <nav>
-            <img src="Logo.png" class="logo">
-            <ul>
-                <li><a href="#">HOME</a></li>
-                <li><a href="Gameplay.html" target="_blank">GAMEPLAY</a></li>
-                <li><a href="Explore.html" target="_blank">EXPLORE</a></li>
-                <li><a href="login page.html" target="_blank">LOGIN</a></li>
-                <li><a href="https://www.hoyolab.com/home" target="_blank">HoYoLAB</a></li>
-            </ul>
-        </nav>
-        <div class="content">
-            <h1>World of Adventure</h1>
-            <a href="https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact"target="_blank">Download Now!</a>           
+            <!-- User Profile (Initially Hidden) -->
+            <li id="nav-profile" style="display: none; position: relative;" class="profile-menu-item">
+                <a href="javascript:void(0)" class="profile-toggle">
+                    <i class="fa-solid fa-user-astronaut"></i> Traveler
+                </a>
+                <div class="profile-dropdown">
+                    <a href="#">My Account</a>
+                    <a href="#">Settings</a>
+                    <a href="javascript:void(0)" onclick="logout()" style="color: #ff4d4d;">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- === HOME SECTION === -->
+    <div id="section-home" class="page-section active">
+        <div class="hero">
+            <video autoplay loop muted playsinline class="back-video">
+                <source src="assets/videos/BG vid.mp4" type="video/mp4">
+            </video>
+
+            <div class="content">
+                <h1>World of Adventure</h1>
+                <!-- Opens the Modal -->
+                <a href="javascript:void(0)" onclick="openLoginModal()" class="btn-primary">Download Now!</a>
+            </div>
         </div>
     </div>
-    
-    <footer>
-        <div class="row">
-            <div class="col">
-                <img src="footer img 1.png" class="logo">
-                <p>"PlayStation Family Mark," "PS5 logo" and "PS4 logo" are registered trademarks or trademarks of Sony Interactive Entertainment Inc.Epic, Epic Games, Epic Games Store, the Epic Games Store logo, and Epic Online Services are trademarks and/or registered trademarks of Epic Games. All other trademarks are the property of their respective owners.</p>
+
+    <!-- === GAMEPLAY SECTION === -->
+    <div id="section-gameplay" class="page-section">
+
+        <!-- Gameplay Hero Section -->
+        <div class="gameplay-hero">
+            <div class="gameplay-hero-particles" id="gameplayParticles"></div>
+            <div class="gameplay-hero-overlay"></div>
+            <div class="gameplay-hero-content">
+                <span class="gameplay-badge"><i class="fas fa-gamepad"></i> EXPERIENCE TEYVAT</span>
+                <h1 class="gameplay-title">
+                    <span class="title-line">Embark On An</span>
+                    <span class="title-highlight">Epic Adventure</span>
+                </h1>
+                <p class="gameplay-subtitle">Explore breathtaking landscapes, battle formidable enemies, and uncover the
+                    secrets of the seven nations in this open-world action RPG.</p>
+                <div class="gameplay-hero-actions">
+                    <a href="#gameplay-features" class="gp-btn gp-btn-primary">
+                        <i class="fas fa-compass"></i> Explore Features
+                    </a>
+                    <a href="#gameplay-videos" class="gp-btn gp-btn-secondary">
+                        <i class="fas fa-play-circle"></i> Watch Trailers
+                    </a>
+                </div>
             </div>
-            <div class="col">
-                <h3>Office  <div class="underline"><span></span></div> </h3>
-                <p>	No.100 Qinzhou Road</p>
+            <div class="gameplay-scroll-indicator">
+                <span>Scroll to Explore</span>
+                <div class="scroll-arrow"><i class="fas fa-chevron-down"></i></div>
+            </div>
+        </div>
+
+        <!-- Game Stats Section -->
+        <div class="gameplay-stats-section">
+            <div class="stats-bg-glow"></div>
+            <div class="gameplay-stats-container">
+                <div class="stat-card" data-target="70">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-number"><span class="counter">0</span>M+</div>
+                    <div class="stat-label">Active Players</div>
+                    <div class="stat-bar">
+                        <div class="stat-bar-fill"></div>
+                    </div>
+                </div>
+                <div class="stat-card" data-target="60">
+                    <div class="stat-icon"><i class="fas fa-user-ninja"></i></div>
+                    <div class="stat-number"><span class="counter">0</span>+</div>
+                    <div class="stat-label">Playable Characters</div>
+                    <div class="stat-bar">
+                        <div class="stat-bar-fill"></div>
+                    </div>
+                </div>
+                <div class="stat-card" data-target="7">
+                    <div class="stat-icon"><i class="fas fa-map-marked-alt"></i></div>
+                    <div class="stat-number"><span class="counter">0</span></div>
+                    <div class="stat-label">Unique Nations</div>
+                    <div class="stat-bar">
+                        <div class="stat-bar-fill"></div>
+                    </div>
+                </div>
+                <div class="stat-card" data-target="500">
+                    <div class="stat-icon"><i class="fas fa-scroll"></i></div>
+                    <div class="stat-number"><span class="counter">0</span>+</div>
+                    <div class="stat-label">Quests & Stories</div>
+                    <div class="stat-bar">
+                        <div class="stat-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Features Section -->
+        <div class="gameplay-features" id="gameplay-features">
+            <div class="section-header">
+                <span class="section-tag">CORE MECHANICS</span>
+                <h2 class="section-title">Game Features</h2>
+                <p class="section-desc">Discover the unique gameplay elements that make Genshin Impact unforgettable</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-element="anemo">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon-glow"></div>
+                        <div class="feature-icon"><i class="fas fa-wind"></i></div>
+                    </div>
+                    <h3>Elemental Combat</h3>
+                    <p>Master 7 elements and combine them for devastating elemental reactions in strategic combat.</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+                <div class="feature-card" data-element="geo">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon-glow"></div>
+                        <div class="feature-icon"><i class="fas fa-globe-asia"></i></div>
+                    </div>
+                    <h3>Open World</h3>
+                    <p>Explore vast landscapes, climb any surface, glide through the skies, and discover hidden
+                        treasures.</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+                <div class="feature-card" data-element="electro">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon-glow"></div>
+                        <div class="feature-icon"><i class="fas fa-users-cog"></i></div>
+                    </div>
+                    <h3>Party System</h3>
+                    <p>Build your dream team of 4 characters and switch between them in real-time during battles.</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+                <div class="feature-card" data-element="hydro">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon-glow"></div>
+                        <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+                    </div>
+                    <h3>Epic Storyline</h3>
+                    <p>Unravel the mysteries of Teyvat through an immersive narrative with unforgettable characters.</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+                <div class="feature-card" data-element="pyro">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon-glow"></div>
+                        <div class="feature-icon"><i class="fas fa-gamepad"></i></div>
+                    </div>
+                    <h3>Cross-Platform</h3>
+                    <p>Play seamlessly across PC, PlayStation, and mobile with cross-save functionality.</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+                <div class="feature-card" data-element="dendro">
+                    <div class="feature-icon-wrapper">
+                        <div class="feature-icon-glow"></div>
+                        <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                    </div>
+                    <h3>Live Updates</h3>
+                    <p>Experience new content every 6 weeks with events, characters, and regions.</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Gallery Section -->
+        <div class="gameplay-videos" id="gameplay-videos">
+            <div class="section-header">
+                <span class="section-tag">OFFICIAL TRAILERS</span>
+                <h2 class="section-title">Game Videos</h2>
+                <p class="section-desc">Watch the official trailers and experience the beauty of Teyvat</p>
+            </div>
+
+            <div class="video-gallery">
+                <!-- Featured Video -->
+                <div class="video-featured" onclick="playVideo('assets/videos/vid1.mp4')">
+                    <div class="video-featured-thumb">
+                        <img src="assets/images/thumb1.jpg" alt="Featured Video">
+                        <div class="video-featured-overlay"></div>
+                    </div>
+                    <div class="video-featured-content">
+                        <div class="play-btn-wrapper">
+                            <div class="play-btn-ring"></div>
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-tag">FEATURED</span>
+                            <h3>Genshin Impact - Official Launch Trailer</h3>
+                            <p>Experience the beginning of your journey in Teyvat</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Grid -->
+                <div class="video-grid">
+                    <div class="video-card" onclick="playVideo('assets/videos/vid2.mp4')">
+                        <div class="video-card-thumb">
+                            <img src="assets/images/2.jpeg" alt="Thumbnail">
+                            <div class="video-card-overlay">
+                                <div class="mini-play-btn"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div class="video-duration">3:45</div>
+                        </div>
+                        <div class="video-card-info">
+                            <h4>Genshin Impact - Accolades Trailer</h4>
+                            <span class="video-views"><i class="fas fa-eye"></i> 2.4M views</span>
+                        </div>
+                    </div>
+
+                    <div class="video-card" onclick="playVideo('assets/videos/vid3.mp4')">
+                        <div class="video-card-thumb">
+                            <img src="assets/images/3.jpeg" alt="Thumbnail">
+                            <div class="video-card-overlay">
+                                <div class="mini-play-btn"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div class="video-duration">8:22</div>
+                        </div>
+                        <div class="video-card-info">
+                            <h4>Teyvat Chapter Storyline Preview: Travail</h4>
+                            <span class="video-views"><i class="fas fa-eye"></i> 18.5M views</span>
+                        </div>
+                    </div>
+
+                    <div class="video-card" onclick="playVideo('assets/videos/vid4.mp4')">
+                        <div class="video-card-thumb">
+                            <img src="assets/images/4.jpeg" alt="Thumbnail">
+                            <div class="video-card-overlay">
+                                <div class="mini-play-btn"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div class="video-duration">4:18</div>
+                        </div>
+                        <div class="video-card-info">
+                            <h4>Story Teaser: We Will Be Reunited</h4>
+                            <span class="video-views"><i class="fas fa-eye"></i> 12.8M views</span>
+                        </div>
+                    </div>
+
+                    <div class="video-card" onclick="playVideo('assets/videos/vid5.mp4')">
+                        <div class="video-card-thumb">
+                            <img src="assets/images/5.jpeg" alt="Thumbnail">
+                            <div class="video-card-overlay">
+                                <div class="mini-play-btn"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div class="video-duration">5:36</div>
+                        </div>
+                        <div class="video-card-info">
+                            <h4>Genshin Impact's New Opening Cutscene</h4>
+                            <span class="video-views"><i class="fas fa-eye"></i> 8.2M views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Player Modal -->
+        <div class="video-player-modal" id="videoPlayerModal">
+            <div class="video-modal-backdrop" onclick="stopVideo()"></div>
+            <div class="video-modal-content">
+                <button class="close-modal" onclick="stopVideo()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <video controls id="myVideo">
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <!-- Image Lightbox Modal -->
+        <div class="image-lightbox-modal" id="imageLightboxModal">
+            <div class="lightbox-backdrop" onclick="closeImageLightbox()"></div>
+            <div class="lightbox-content">
+                <button class="close-lightbox" onclick="closeImageLightbox()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <img id="lightboxImage" src="" alt="Full Screen Screenshot">
+            </div>
+        </div>
+
+        <!-- Screenshots Gallery Section -->
+        <div class="gameplay-screenshots">
+            <div class="section-header">
+                <span class="section-tag">VISUAL SHOWCASE</span>
+                <h2 class="section-title">Game Screenshots</h2>
+                <p class="section-desc">Breathtaking visuals from the world of Teyvat</p>
+            </div>
+
+            <div class="screenshots-wrapper">
+                <div class="swiper gameplay-swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i1.jpg" alt="Screenshot 1">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i2.jpg" alt="Screenshot 2">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i3.jpg" alt="Screenshot 3">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i4.jpg" alt="Screenshot 4">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i5.jpg" alt="Screenshot 5">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i6.jpg" alt="Screenshot 6">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i7.jpg" alt="Screenshot 7">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i8.jpg" alt="Screenshot 8">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i9.jpg" alt="Screenshot 9">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="screenshot-card">
+                                <img src="assets/images/i10.jpg" alt="Screenshot 10">
+                                <div class="screenshot-overlay">
+                                    <i class="fas fa-expand"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action Section -->
+        <div class="gameplay-cta">
+            <div class="cta-bg-effects">
+                <div class="cta-orb cta-orb-1"></div>
+                <div class="cta-orb cta-orb-2"></div>
+                <div class="cta-orb cta-orb-3"></div>
+            </div>
+            <div class="cta-content">
+                <h2>Begin Your Adventure Today</h2>
+                <p>Join millions of Travelers exploring the world of Teyvat. Free to play on all platforms.</p>
+                <a href="javascript:void(0)" onclick="openLoginModal()" class="cta-button">
+                    <span>Download Now</span>
+                    <i class="fas fa-download"></i>
+                </a>
+                <div class="cta-platforms">
+                    <span><i class="fab fa-playstation"></i></span>
+                    <span><i class="fab fa-windows"></i></span>
+                    <span><i class="fab fa-apple"></i></span>
+                    <span><i class="fab fa-android"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === EXPLORE SECTION === -->
+    <div id="section-explore" class="page-section">
+        <div class="explore-container">
+            <div class="explore-row">
+                <div class="explore-text">
+                    <h1>Teyvat</h1>
+                    <p>Genshin Impact takes place in the fantasy world of Teyvat, home to seven nations, each of which
+                        is
+                        tied to a different element and ruled by a different god. The story follows the Traveler, who
+                        has
+                        traveled across countless worlds with their twin sibling before becoming separated in Teyvat.
+                    </p>
+                    <br>
+                    <a href="#regions" class="btn-primary">Start Journey</a>
+                </div>
+                <div class="cards-grid">
+                    <div class="region-card" onclick="scrollToRegion('mondstadt')">
+                        <img src="assets/images/Mondstadt.jpeg" class="card-bg" alt="Mondstadt">
+                        <div class="region-card-content">
+                            <h5>Mondstadt</h5>
+                            <p>City of Freedom</p>
+                        </div>
+                    </div>
+                    <div class="region-card" onclick="scrollToRegion('liyue')">
+                        <img src="assets/images/Liyue.jpg" class="card-bg" alt="Liyue">
+                        <div class="region-card-content">
+                            <h5>Liyue</h5>
+                            <p>Bountiful Harbor</p>
+                        </div>
+                    </div>
+                    <div class="region-card" onclick="scrollToRegion('sumeru')">
+                        <img src="assets/images/Sumeru.jpeg" class="card-bg" alt="Sumeru">
+                        <div class="region-card-content">
+                            <h5>Sumeru</h5>
+                            <p>City of Scholars</p>
+                        </div>
+                    </div>
+                    <div class="region-card" onclick="scrollToRegion('inazuma')">
+                        <img src="assets/images/Inazuma.jpeg" class="card-bg" alt="Inazuma">
+                        <div class="region-card-content">
+                            <h5>Inazuma</h5>
+                            <p>Isolated Archipelago</p>
+                        </div>
+                    </div>
+                    <div class="region-card" onclick="scrollToRegion('fontaine')">
+                        <img src="assets/images/fontaine.png" class="card-bg" alt="Fontaine">
+                        <div class="region-card-content">
+                            <h5>Fontaine</h5>
+                            <p>Nation of Justice</p>
+                        </div>
+                    </div>
+                    <div class="region-card" onclick="scrollToRegion('natlan')">
+                        <img src="assets/images/natlan.jpg" class="card-bg" alt="Natlan">
+                        <div class="region-card-content">
+                            <h5>Natlan</h5>
+                            <p>Nation of War</p>
+                        </div>
+                    </div>
+                    <div class="region-card" onclick="scrollToRegion('nodkrai')">
+                        <img src="assets/images/nod_krai.png" class="card-bg" alt="Nod-Krai">
+                        <div class="region-card-content">
+                            <h5>Nod-Krai</h5>
+                            <p>Lawless Frontier</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Region Details -->
+        <div id="regions">
+            <!-- Mondstadt - Anemo -->
+            <div id="mondstadt" class="region-detail bg-mondstadt" data-element="anemo">
+                <div class="region-particles"></div>
+                <div class="region-decorative-line"></div>
+                <div class="region-image-container">
+                    <img src="assets/images/mondstadt.png" alt="Mondstadt Landscape">
+                    <div class="region-image-frame"></div>
+                    <div class="region-image-glow"></div>
+                </div>
+                <div class="region-info">
+                    <div class="region-element-badge anemo">
+                        <i class="fa-solid fa-wind"></i>
+                    </div>
+                    <span class="region-subtitle">City of Freedom</span>
+                    <h2 data-text="Mondstadt">Mondstadt</h2>
+                    <div class="region-archon">
+                        <span class="archon-label">Archon</span>
+                        <span class="archon-name">Barbatos</span>
+                    </div>
+                    <p>A city of freedom that lies in the northeast of Teyvat. From amongst mountains and wide-open
+                        plains, carefree breezes carry the scent of dandelions — a gift from the Anemo God, Barbatos —
+                        across
+                        Cider Lake to Mondstadt, which sits on an island in the middle of the lake.</p>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <i class="fa-solid fa-mountain-sun"></i>
+                            <span>Dragonspine</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-church"></i>
+                            <span>Cathedral</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-wine-glass"></i>
+                            <span>Dawn Winery</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="region-corner region-corner-tl"></div>
+                <div class="region-corner region-corner-br"></div>
+            </div>
+
+            <!-- Liyue - Geo -->
+            <div id="liyue" class="region-detail bg-liyue" data-element="geo">
+                <div class="region-particles"></div>
+                <div class="region-decorative-line"></div>
+                <div class="region-image-container">
+                    <img src="assets/images/liyue1.jpg" alt="Liyue Landscape">
+                    <div class="region-image-frame"></div>
+                    <div class="region-image-glow"></div>
+                </div>
+                <div class="region-info">
+                    <div class="region-element-badge geo">
+                        <i class="fa-solid fa-gem"></i>
+                    </div>
+                    <span class="region-subtitle">Harbor of Stone and Contracts</span>
+                    <h2 data-text="Liyue">Liyue</h2>
+                    <div class="region-archon">
+                        <span class="archon-label">Archon</span>
+                        <span class="archon-name">Morax</span>
+                    </div>
+                    <p>A bountiful harbor that lies in the east of Teyvat. Mountains stand tall and proud alongside the
+                        stone forest, that together with the open plains and lively rivers make up Liyue's bountiful
+                        landscape, which shows its unique beauty through each of the four seasons.</p>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <span>Liyue Harbor</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-mountain"></i>
+                            <span>Jueyun Karst</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-torii-gate"></i>
+                            <span>The Chasm</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="region-corner region-corner-tl"></div>
+                <div class="region-corner region-corner-br"></div>
+            </div>
+
+            <!-- Inazuma - Electro -->
+            <div id="inazuma" class="region-detail bg-inazuma" data-element="electro">
+                <div class="region-particles"></div>
+                <div class="region-decorative-line"></div>
+                <div class="region-image-container">
+                    <img src="assets/images/inazuma.jpg" alt="Inazuma Landscape">
+                    <div class="region-image-frame"></div>
+                    <div class="region-image-glow"></div>
+                </div>
+                <div class="region-info">
+                    <div class="region-element-badge electro">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <span class="region-subtitle">The Immovable God and the Eternal Euthymia</span>
+                    <h2 data-text="Inazuma">Inazuma</h2>
+                    <div class="region-archon">
+                        <span class="archon-label">Archon</span>
+                        <span class="archon-name">Beelzebul</span>
+                    </div>
+                    <p>An Isolated Archipelago Far East of Teyvat. Overcome endless thunderstorms and set foot on the
+                        islands of red maple and cherry blossoms. On winding shores and towering cliffs, and in forests
+                        and mountains full of secrets, witness the Eternity pursued by Her Excellency, the Almighty
+                        Narukami
+                        Ogosho.</p>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <i class="fa-solid fa-torii-gate"></i>
+                            <span>Narukami Island</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-tree"></i>
+                            <span>Sacred Sakura</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-bolt-lightning"></i>
+                            <span>Tenshukaku</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="region-corner region-corner-tl"></div>
+                <div class="region-corner region-corner-br"></div>
+            </div>
+
+            <!-- Sumeru - Dendro -->
+            <div id="sumeru" class="region-detail bg-sumeru" data-element="dendro">
+                <div class="region-particles"></div>
+                <div class="region-decorative-line"></div>
+                <div class="region-image-container">
+                    <img src="assets/images/sumeru1.jpg" alt="Sumeru Landscape">
+                    <div class="region-image-frame"></div>
+                    <div class="region-image-glow"></div>
+                </div>
+                <div class="region-info">
+                    <div class="region-element-badge dendro">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <span class="region-subtitle">Rainforest of Wisdom</span>
+                    <h2 data-text="Sumeru">Sumeru</h2>
+                    <div class="region-archon">
+                        <span class="archon-label">Archon</span>
+                        <span class="archon-name">Lesser Lord Kusanali</span>
+                    </div>
+                    <p>The city of scholars located in the west-central part of Teyvat. A fantastical nation of both
+                        lush rainforest and barren desert, where countless fruits of wisdom grow and are buried. Whether
+                        Travelers travel from afar through the forest to reach the academy city or delve deep into the
+                        desert to discover the historical ruins of the red desert, a wealth of valuable knowledge awaits
+                        them here.</p>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Akademiya</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-tree"></i>
+                            <span>Vanarana</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-sun"></i>
+                            <span>Desert of Hadramaveth</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="region-corner region-corner-tl"></div>
+                <div class="region-corner region-corner-br"></div>
+            </div>
+
+            <!-- Fontaine - Hydro -->
+            <div id="fontaine" class="region-detail bg-fontaine" data-element="hydro">
+                <div class="region-particles"></div>
+                <div class="region-decorative-line"></div>
+                <div class="region-image-container">
+                    <img src="assets/images/fontaine.png" alt="Fontaine Landscape">
+                    <div class="region-image-frame"></div>
+                    <div class="region-image-glow"></div>
+                </div>
+                <div class="region-info">
+                    <div class="region-element-badge hydro">
+                        <i class="fa-solid fa-droplet"></i>
+                    </div>
+                    <span class="region-subtitle">Nation of Justice</span>
+                    <h2 data-text="Fontaine">Fontaine</h2>
+                    <div class="region-archon">
+                        <span class="archon-label">Archon</span>
+                        <span class="archon-name">Focalors</span>
+                    </div>
+                    <p>The Nation of Justice, a hub of culture and art where the elegance of the courtroom meets
+                        advanced technology. It is a watery wonderland renowned for its elaborate legal system and
+                        steampunk
+                        aesthetic. Here, justice rules supreme under the Hydro Archon's watchful eye.</p>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <i class="fa-solid fa-gavel"></i>
+                            <span>Opera Epiclese</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-gear"></i>
+                            <span>Court of Fontaine</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-anchor"></i>
+                            <span>Fontaine Research Institute</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="region-corner region-corner-tl"></div>
+                <div class="region-corner region-corner-br"></div>
+            </div>
+
+            <!-- Natlan - Pyro -->
+            <div id="natlan" class="region-detail bg-natlan" data-element="pyro">
+                <div class="region-particles"></div>
+                <div class="region-decorative-line"></div>
+                <div class="region-image-container">
+                    <img src="assets/images/natlan.jpg" alt="Natlan Landscape">
+                    <div class="region-image-frame"></div>
+                    <div class="region-image-glow"></div>
+                </div>
+                <div class="region-info">
+                    <div class="region-element-badge pyro">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <span class="region-subtitle">Land of War and Dragons</span>
+                    <h2 data-text="Natlan">Natlan</h2>
+                    <div class="region-archon">
+                        <span class="archon-label">Archon</span>
+                        <span class="archon-name">Mavuika</span>
+                    </div>
+                    <p>The Nation of Pyro and War, a land of red-hot passion where dragons and humans coexist. Divided
+                        among tribes, its volcanic terrain and hot springs are home to the worship of the God of War.
+                        The
+                        Night Kingdom lurks beneath, holding secrets of the ancient past.</p>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <i class="fa-solid fa-volcano"></i>
+                            <span>Volcano</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-dragon"></i>
+                            <span>Saurian Companions</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-moon"></i>
+                            <span>Night Kingdom</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="region-corner region-corner-tl"></div>
+                <div class="region-corner region-corner-br"></div>
+            </div>
+
+            <!-- Nod-Krai - Unknown/Lunar -->
+            <div id="nodkrai" class="region-detail bg-nodkrai" data-element="lunar">
+                <div class="region-particles"></div>
+                <div class="region-decorative-line"></div>
+                <div class="region-image-container">
+                    <img src="assets/images/nod_krai.png" alt="Nod-Krai Landscape">
+                    <div class="region-image-frame"></div>
+                    <div class="region-image-glow"></div>
+                </div>
+                <div class="region-info">
+                    <div class="region-element-badge lunar">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                    <span class="region-subtitle">Lawless Frontier</span>
+                    <h2 data-text="Nod-Krai">Nod-Krai</h2>
+                    <div class="region-archon">
+                        <span class="archon-label">Status</span>
+                        <span class="archon-name">Autonomous Region</span>
+                    </div>
+                    <p>An autonomous region south of Snezhnaya, often called a lawless frontier. It is a gathering place
+                        for those seeking freedom from Teyvat's order, operating under its own rules amidst ancient
+                        lunar
+                        mysteries. The moon's influence permeates every corner of this enigmatic land.</p>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <i class="fa-solid fa-skull"></i>
+                            <span>Frontier Towns</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-snowflake"></i>
+                            <span>Frozen Wastes</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-star"></i>
+                            <span>Lunar Ruins</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="region-corner region-corner-tl"></div>
+                <div class="region-corner region-corner-br"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === LOGIN SECTION (Full Page Style) === -->
+    <div id="section-login" class="page-section">
+        <div class="login-container">
+            <div class="form-box">
+                <h1 id="pageTitle">Sign Up</h1>
+                <form class="auth-form">
+                    <div class="input-group">
+                        <div class="input-field" id="pageNameField">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" placeholder="Name">
+                        </div>
+
+                        <div class="input-field">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" placeholder="Email">
+                        </div>
+
+                        <div class="input-field">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" placeholder="Password">
+                        </div>
+                        <p style="margin-top: 15px; font-size: 13px;">Lost Password? <a href="#"
+                                style="color: var(--secondary);">Click Here!</a></p>
+                    </div>
+                    <div class="btn-field">
+                        <button type="button" id="pageSignupBtn">Sign Up</button>
+                        <button type="button" id="pageLoginBtn" class="disable">Log In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shared Footer -->
+    <footer>
+        <canvas id="footer-webgl"></canvas>
+        <div class="footer-content">
+            <div class="footer-col">
+                <img src="assets/images/footer img 1.png" class="logo" style="width: 120px; margin-bottom: 20px;">
+                <p>"PlayStation Family Mark," "PS5 logo" and "PS4 logo" are registered trademarks or trademarks of Sony
+                    Interactive Entertainment Inc. Epic, Epic Games, Epic Games Store, the Epic Games Store logo, and
+                    Epic Online Services are trademarks and/or registered trademarks of Epic Games. All other trademarks
+                    are the property of their respective owners.</p>
+            </div>
+
+            <div class="footer-col">
+                <h3>Office</h3>
+                <p>No.100 Qinzhou Road</p>
                 <p>Building 1, Room 1012</p>
                 <p>Shangai, CN 31200235, CN</p>
-                <p class="email-id">genshin_cs@hoyoverse.com</p>
+                <p style="margin-top: 10px; color: var(--accent);">genshin_cs@hoyoverse.com</p>
                 <h4>86-021-60331122</h4>
             </div>
-            <div class="col">
-                <h3>Links <div class="underline"><span></span></div> </h3>
+
+            <div class="footer-col">
+                <h3>Links</h3>
                 <ul>
-                    <li><a href="https://genshin.hoyoverse.com/en/company/privacy" target="_blank">Privacy Policy</a></li>
-                    <li><a href="https://genshin.hoyoverse.com/en/company/terms" target="_blank">Terms of Sevice</a></li>
-                    <li><a href="https://www.hoyoverse.com/en-us/about-us?utm_source=genshin&utm_medium=footer" target="_blank">About Us</a></li>
-                    <li><a href="https://www.hoyolab.com/home"target="_blank">HoYoLAB</a></li>
+                    <li><a href="https://genshin.hoyoverse.com/en/company/privacy" target="_blank">Privacy Policy</a>
+                    </li>
+                    <li><a href="https://genshin.hoyoverse.com/en/company/terms" target="_blank">Terms of Service</a>
+                    </li>
+                    <li><a href="https://www.hoyoverse.com/en-us/about-us?utm_source=genshin&utm_medium=footer"
+                            target="_blank">About Us</a></li>
+                    <li><a href="https://www.hoyolab.com/home" target="_blank">HoYoLAB</a></li>
                 </ul>
             </div>
-            <div class="col">
-                <h3>Newsletter <div class="underline"><span></span></div> </h3>
+
+            <div class="footer-col newsletter">
+                <h3>Newsletter</h3>
                 <form>
-                    <i class="far fa-envelope"></i>
+                    <i class="far fa-envelope" style="margin-right: 10px; color: #fff;"></i>
                     <input type="email" placeholder="Enter your email id" required>
                     <button type="submit"><i class="fas fa-arrow-right"></i></button>
                 </form>
                 <div class="social-icons">
-                    <a href="https://www.facebook.com/Genshinimpact/" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.facebook.com/Genshinimpact/" target="_blank"><i
+                            class="fa-brands fa-facebook-f"></i></a>
                     <a href="https://twitter.com/GenshinImpact" target="_blank"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="https://www.youtube.com/c/genshinimpact" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="https://www.instagram.com/genshinimpact/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://discord.com/invite/genshinimpact" target="_blank"><i class="fa-brands fa-discord"></i></a>
+                    <a href="https://www.youtube.com/c/genshinimpact" target="_blank"><i
+                            class="fa-brands fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/genshinimpact/" target="_blank"><i
+                            class="fa-brands fa-instagram"></i></a>
+                    <a href="https://discord.com/invite/genshinimpact" target="_blank"><i
+                            class="fa-brands fa-discord"></i></a>
                 </div>
             </div>
         </div>
-        <hr>
         <p class="copyright">Copyright © Created by THARUNSIVA @CIT</p>
     </footer>
-    
+
+    <!-- Home Page Login Modal (Popup) -->
+    <div id="loginModal" class="login-modal-overlay">
+        <div class="login-modal-content">
+            <span class="close-modal-btn" onclick="closeLoginModal()">&times;</span>
+            <div class="form-box">
+                <h1 id="modalTitle">Sign Up</h1>
+                <form class="auth-form">
+                    <div class="input-group">
+                        <div class="input-field" id="modalNameField">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" placeholder="Name">
+                        </div>
+
+                        <div class="input-field">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" placeholder="Email">
+                        </div>
+
+                        <div class="input-field">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" placeholder="Password">
+                        </div>
+                        <p style="margin-top: 15px; font-size: 13px;">Lost Password? <a href="#"
+                                style="color: var(--secondary);">Click Here!</a></p>
+                    </div>
+                    <div class="btn-field">
+                        <button type="button" id="modalSignupBtn">Sign Up</button>
+                        <button type="button" id="modalLoginBtn" class="disable">Log In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <script>
+            // --- 1. Navigation & Section Logic ---
+            function showSection(sectionId) {
+                // Hide all sections
+                const sections = document.querySelectorAll('.page-section');
+                sections.forEach(sec => sec.classList.remove('active'));
+
+                // Show selected section
+                const target = document.getElementById('section-' + sectionId);
+                if (target) {
+                    target.classList.add('active');
+                }
+
+                // Update Navigation Highlighting
+                const navLinks = document.querySelectorAll('nav ul li a');
+                navLinks.forEach(link => link.classList.remove('active'));
+
+                const activeNav = document.getElementById('nav-' + sectionId);
+                if (activeNav) {
+                    activeNav.classList.add('active');
+                }
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+
+            // --- Login Logic is now in separate file ---
+            // See: js/login.js
+
+            // --- Video Modal Click Handler ---
+            window.addEventListener('click', function (event) {
+                // Close Gameplay video modal
+                if (event.target == videoModal) {
+                    stopVideo();
+                }
+            });
+
+            // --- 3. Full Page Login Logic (Section) ---
+            // Duplicate logic for the standalone section elements
+            const pageSignupBtn = document.getElementById("pageSignupBtn");
+            const pageLoginBtn = document.getElementById("pageLoginBtn");
+            const pageNameField = document.getElementById("pageNameField");
+            const pageTitle = document.getElementById("pageTitle");
+
+            // Helper function to perform page section login
+            function performPageLogin() {
+                const loginSection = document.getElementById('section-login');
+                const emailInput = loginSection ? loginSection.querySelector('input[type="email"], input[placeholder="Email"]') : null;
+                const passwordInput = loginSection ? loginSection.querySelector('input[type="password"], input[placeholder="Password"]') : null;
+                const nameInput = loginSection ? loginSection.querySelector('input[placeholder="Name"]') : null;
+
+                const email = emailInput ? emailInput.value.trim() : '';
+                const password = passwordInput ? passwordInput.value.trim() : '';
+                const name = nameInput ? nameInput.value.trim() : '';
+
+                // Validate
+                if (!email) {
+                    alert('Please enter your email address.');
+                    if (emailInput) emailInput.focus();
+                    return;
+                }
+
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    alert('Please enter a valid email address.');
+                    if (emailInput) emailInput.focus();
+                    return;
+                }
+
+                if (!password) {
+                    alert('Please enter your password.');
+                    if (passwordInput) passwordInput.focus();
+                    return;
+                }
+
+                if (password.length < 6) {
+                    alert('Password must be at least 6 characters long.');
+                    if (passwordInput) passwordInput.focus();
+                    return;
+                }
+
+                // Get username from name field or email
+                const username = name || email.split('@')[0] || 'Traveler';
+
+                // Save to localStorage
+                localStorage.setItem('genshinUser', username);
+                localStorage.setItem('genshinEmail', email);
+
+                // Clear form
+                if (emailInput) emailInput.value = '';
+                if (passwordInput) passwordInput.value = '';
+                if (nameInput) nameInput.value = '';
+
+                // Update UI
+                const navProfile = document.getElementById('nav-profile');
+                if (navProfile) {
+                    navProfile.style.display = 'block';
+                    const profileToggle = navProfile.querySelector('.profile-toggle');
+                    if (profileToggle) {
+                        profileToggle.innerHTML = '<i class="fa-solid fa-user-astronaut"></i> ' + username;
+                    }
+                }
+
+                // Navigate to home
+                showSection('home');
+                alert('Welcome, ' + username + '!');
+            }
+
+            if (pageLoginBtn) {
+                pageLoginBtn.onclick = function () {
+                    if (!pageLoginBtn.classList.contains('disable')) {
+                        // If this login button is clicked when active, log them in!
+                        performPageLogin();
+                    } else {
+                        pageNameField.style.maxHeight = "0";
+                        pageNameField.style.margin = "0";
+                        pageNameField.style.padding = "0";
+                        pageTitle.innerHTML = "Log In";
+                        pageSignupBtn.classList.add("disable");
+                        pageLoginBtn.classList.remove("disable");
+                    }
+                }
+            }
+
+            if (pageSignupBtn) {
+                pageSignupBtn.onclick = function () {
+                    if (!pageSignupBtn.classList.contains('disable')) {
+                        // If this signup button is clicked when active, sign them up!
+                        performPageLogin();
+                    } else {
+                        pageNameField.style.maxHeight = "65px";
+                        pageNameField.style.margin = "15px 0";
+                        pageNameField.style.padding = "0 20px";
+                        pageTitle.innerHTML = "Sign Up";
+                        pageSignupBtn.classList.remove("disable");
+                        pageLoginBtn.classList.add("disable");
+                    }
+                }
+            }
+
+
+            // --- 4. Enhanced Gameplay Logic ---
+            var videoModal = document.getElementById("videoPlayerModal");
+            var myVideo = document.getElementById("myVideo");
+
+            function playVideo(file) {
+                myVideo.src = file;
+                videoModal.style.display = "flex";
+                myVideo.play();
+            }
+
+            function stopVideo() {
+                videoModal.style.display = "none";
+                myVideo.pause();
+                myVideo.src = "";
+            }
+
+            // --- Image Lightbox Logic ---
+            var imageLightbox = document.getElementById("imageLightboxModal");
+            var lightboxImage = document.getElementById("lightboxImage");
+
+            function openImageLightbox(src) {
+                lightboxImage.src = src;
+                imageLightbox.style.display = "flex";
+            }
+
+            function closeImageLightbox() {
+                imageLightbox.style.display = "none";
+                lightboxImage.src = "";
+            }
+
+            // Attach click listeners to screenshots (run after DOM load)
+            document.addEventListener('DOMContentLoaded', () => {
+                const screenshotCards = document.querySelectorAll('.screenshot-card');
+                screenshotCards.forEach(card => {
+                    card.addEventListener('click', function () {
+                        const img = this.querySelector('img');
+                        if (img) {
+                            openImageLightbox(img.src);
+                        }
+                    });
+                });
+            });
+
+            // --- Animated Counter for Stats ---
+            function animateCounter(element, target, duration = 2000) {
+                let start = 0;
+                const increment = target / (duration / 16);
+
+                function updateCounter() {
+                    start += increment;
+                    if (start < target) {
+                        element.textContent = Math.floor(start);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        element.textContent = target;
+                    }
+                }
+                updateCounter();
+            }
+
+            // --- Intersection Observer for Scroll Animations ---
+            function setupScrollAnimations() {
+                const statCards = document.querySelectorAll('.stat-card');
+                const featureCards = document.querySelectorAll('.feature-card');
+
+                const observerOptions = {
+                    threshold: 0.3,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                // Stats counter observer
+                const statsObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                            entry.target.classList.add('animated');
+                            const counter = entry.target.querySelector('.counter');
+                            const target = parseInt(entry.target.dataset.target);
+                            if (counter && target) {
+                                animateCounter(counter, target, 1500);
+                            }
+                        }
+                    });
+                }, observerOptions);
+
+                statCards.forEach(card => statsObserver.observe(card));
+
+                // Feature cards observer
+                const featureObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.style.opacity = '1';
+                                entry.target.style.transform = 'translateY(0)';
+                            }, index * 100);
+                        }
+                    });
+                }, observerOptions);
+
+                featureCards.forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'all 0.6s ease-out';
+                    featureObserver.observe(card);
+                });
+            }
+
+            // --- Floating Particles for Gameplay Hero ---
+            function createParticles() {
+                const particlesContainer = document.getElementById('gameplayParticles');
+                if (!particlesContainer) return;
+
+                const particleCount = 50;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'floating-particle';
+                    particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: rgba(255, 215, 0, ${Math.random() * 0.5 + 0.2});
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation: floatParticle ${Math.random() * 8 + 6}s ease-in-out infinite;
+                    animation-delay: ${Math.random() * 5}s;
+                    pointer-events: none;
+                    box-shadow: 0 0 ${Math.random() * 10 + 5}px rgba(255, 215, 0, 0.3);
+                `;
+                    particlesContainer.appendChild(particle);
+                }
+
+                // Add particle animation to stylesheet
+                if (!document.querySelector('#particle-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'particle-styles';
+                    style.textContent = `
+                    @keyframes floatParticle {
+                        0%, 100% {
+                            transform: translateY(0) translateX(0) scale(1);
+                            opacity: 0.3;
+                        }
+                        25% {
+                            transform: translateY(-30px) translateX(15px) scale(1.2);
+                            opacity: 0.8;
+                        }
+                        50% {
+                            transform: translateY(-60px) translateX(-10px) scale(0.8);
+                            opacity: 0.5;
+                        }
+                        75% {
+                            transform: translateY(-30px) translateX(20px) scale(1.1);
+                            opacity: 0.7;
+                        }
+                    }
+                `;
+                    document.head.appendChild(style);
+                }
+            }
+
+            // --- Smooth Scroll for Internal Links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // --- Enhanced Swiper Initialization ---
+            document.addEventListener('DOMContentLoaded', () => {
+                // Create particles
+                createParticles();
+
+                // Setup scroll animations
+                setupScrollAnimations();
+
+                // Initialize gameplay screenshot swiper with enhanced effects
+                const gameplaySwiper = new Swiper('.gameplay-swiper', {
+                    autoplay: {
+                        delay: 4000,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true,
+                    },
+                    loop: true,
+                    speed: 800,
+                    grabCursor: true,
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                        dynamicBullets: true,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                    effect: 'fade',
+                    fadeEffect: {
+                        crossFade: true
+                    },
+                    keyboard: {
+                        enabled: true,
+                        onlyInViewport: true,
+                    },
+                    on: {
+                        slideChange: function () {
+                            // Add subtle zoom effect on slide change
+                            const activeSlide = this.slides[this.activeIndex];
+                            if (activeSlide) {
+                                activeSlide.querySelector('img')?.classList.add('zoom-active');
+                            }
+                        }
+                    }
+                });
+
+                // Parallax effect on scroll for gameplay hero
+                window.addEventListener('scroll', () => {
+                    const gameplayHero = document.querySelector('.gameplay-hero');
+                    if (gameplayHero) {
+                        const scrolled = window.pageYOffset;
+                        const heroContent = gameplayHero.querySelector('.gameplay-hero-content');
+                        if (heroContent && scrolled < window.innerHeight) {
+                            heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+                            heroContent.style.opacity = 1 - (scrolled / window.innerHeight);
+                        }
+                    }
+                });
+            });
+
+            // --- 5. Explore Logic ---
+            function scrollToRegion(id) {
+                // Find the element within the explore section
+                const el = document.getElementById(id);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        </script>
+
+        <!-- Three.js Footer Animation: Cosmic Nebula -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const canvas = document.getElementById('footer-webgl');
+                const footer = document.querySelector('footer');
+
+                if (!canvas || !footer) return;
+
+                // --- ETHEREAL NEBULA CONFIGURATION ---
+                const scene = new THREE.Scene();
+                // Fog matches the background color for seamless blend
+                scene.fog = new THREE.FogExp2(0x050505, 0.002);
+
+                const camera = new THREE.PerspectiveCamera(60, footer.clientWidth / footer.clientHeight, 1, 1000);
+                camera.position.z = 1;
+                camera.rotation.x = 1.16;
+                camera.rotation.y = -0.12;
+                camera.rotation.z = 0.27;
+
+                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+                renderer.setSize(footer.clientWidth, footer.clientHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+
+                // --- TEXTURE GENERATOR (Soft Cloud/Star) ---
+                function getTexture() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 32;
+                    canvas.height = 32;
+                    const ctx = canvas.getContext('2d');
+
+                    const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+                    grad.addColorStop(0, 'rgba(255,255,255,1)');
+                    grad.addColorStop(0.2, 'rgba(255,255,255,0.8)');
+                    grad.addColorStop(0.4, 'rgba(100,200,255,0.2)');
+                    grad.addColorStop(1, 'rgba(0,0,0,0)');
+
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(0, 0, 32, 32);
+                    return new THREE.CanvasTexture(canvas);
+                }
+                const particleTex = getTexture();
+
+                // --- LIGHTS ---
+                const ambient = new THREE.AmbientLight(0x555555);
+                scene.add(ambient);
+
+                // Colored lights to tint the white clouds
+                const blueLight = new THREE.PointLight(0x3677ac, 50, 450, 1.7);
+                blueLight.position.set(200, 300, 100);
+                scene.add(blueLight);
+
+                const goldLight = new THREE.PointLight(0xffaa00, 20, 450, 1.7);
+                goldLight.position.set(100, 300, 100);
+                scene.add(goldLight);
+
+                const purpleLight = new THREE.PointLight(0x663399, 30, 450, 1.7);
+                purpleLight.position.set(300, 300, 200);
+                scene.add(purpleLight);
+
+                // --- PARTICLE CLOUD (NEBULA) ---
+                const cloudGeo = new THREE.BufferGeometry();
+                const cloudCount = 800;
+                const cloudPos = new Float32Array(cloudCount * 3);
+
+                for (let i = 0; i < cloudCount * 3; i++) {
+                    cloudPos[i] = Math.random() * 1000 - 500;
+                }
+
+                cloudGeo.setAttribute('position', new THREE.BufferAttribute(cloudPos, 3));
+
+                const cloudMat = new THREE.PointsMaterial({
+                    size: 25,
+                    map: particleTex,
+                    transparent: true,
+                    opacity: 0.25,
+                    depthWrite: false,
+                    blending: THREE.AdditiveBlending,
+                });
+
+                const cloudSystem = new THREE.Points(cloudGeo, cloudMat);
+                scene.add(cloudSystem);
+
+                // --- STARS ---
+                const starGeo = new THREE.BufferGeometry();
+                const starCount = 1000;
+                const starPos = new Float32Array(starCount * 3);
+                for (let i = 0; i < starCount * 3; i++) {
+                    starPos[i] = Math.random() * 800 - 400;
+                }
+                starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                const starMat = new THREE.PointsMaterial({
+                    color: 0xffffff,
+                    size: 1.5,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const starSystem = new THREE.Points(starGeo, starMat);
+                scene.add(starSystem);
+
+                // --- ANIMATION ---
+                function animate() {
+                    requestAnimationFrame(animate);
+
+                    const time = Date.now() * 0.001;
+
+                    // Rotate cloud slower
+                    cloudSystem.rotation.z -= 0.001;
+                    starSystem.rotation.z -= 0.0005;
+
+                    // Gentle drift
+                    cloudSystem.position.x = Math.sin(time * 0.1) * 20;
+
+                    renderer.render(scene, camera);
+                }
+                animate();
+
+                // Resize
+                window.addEventListener('resize', () => {
+                    const w = footer.clientWidth;
+                    const h = footer.clientHeight;
+                    renderer.setSize(w, h);
+                    camera.aspect = w / h;
+                    camera.updateProjectionMatrix();
+                });
+            });
+        </script>
 </body>
+
 </html>
